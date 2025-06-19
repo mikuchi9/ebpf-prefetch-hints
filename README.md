@@ -26,3 +26,8 @@ This tool uses an eBPF kernel-side program to track execution frequency of binar
 make all
 sudo ./prefetch_hint <time_interval>
 ```
+
+### 📦 Header provenance
+The bundled `vmlinux.h` was generated on Ubuntu 22.04.04 LTS (kernel 6.5.0, BTF enabled)
+using `bpftool v7.3.0`. Regenerate with `make headers` if you need an exact match
+for a custom kernel.
