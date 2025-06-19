@@ -31,22 +31,15 @@ static __always_inline __u8 str_cmp(const char *s1, __u16 size, const char *s2)
     return -1;
 }
 
-static __always_inline __u8 str_cp(char *dst, __u16 size, const char *src)
+static __always_inline __u16 str_cp(char *dst, const char *src)
 {
-    int i;
-    #pragma unroll
-    for (i = 0; src[i] != '\0' || i < size; i++) {
+    __u16 i;
+    #pragma unroll (MAX_FILENAME_LENGTH)
+    for (i = 0; src[i] != '\0' && i < MAX_FILENAME_LENGTH; i++) {
         dst[i] = src[i];
-        if (src[i] == '\0') {
-            dst[i] = src[i];
-            return i;
-        }
-        if (i == size - 1) {
-            dst[size] = '\0';
-            return i + 1;
-        }
     }
-    return -1;
+    dst[i] = '\0';
+    return i;
 }
 
 // find the least hot executable binary
@@ -56,7 +49,7 @@ static long find_least_ref_bin(struct bpf_map *map, const void *key, void *value
 
     if (*(__u64 *)value < lhb->count) {
         lhb->count = *(__u64 *)value;
-        str_cp(lhb->name, MAX_FILENAME_LENGTH, key);
+        str_cp(lhb->name, key);
         ctx = lhb;
     }
     return 0;
@@ -100,7 +93,6 @@ int watch_hot_bins(struct trace_event_raw_sys_enter *ctx) {
                     // replace least referenced entry
                     struct least_hot_bin lhb = {0};
                     lhb.count = MAX_VALUE;
-
                     long (*least_ref)(struct bpf_map *, const void *, void *, void *) = &find_least_ref_bin;
                     // find least referenced bin
                     bpf_for_each_map_elem(&bin_freq_map, least_ref, &lhb, 0);
