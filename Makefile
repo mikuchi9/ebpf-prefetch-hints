@@ -30,3 +30,6 @@ $(PROG_NAME): $(USER_SRC)
 
 clean:
 	rm $(KERN_OBJ) $(PROG_NAME)
+
+headers:
+	bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
