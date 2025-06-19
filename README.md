@@ -20,6 +20,14 @@ This tool uses an eBPF kernel-side program to track execution frequency of binar
 - [x] Advises the kernel with `posix_fadvise()` to **prefetch the
        *.text* segment** of each hot ELF binary
 
+### Prerequisites
+
+- Linux kernel with eBPF support
+- Clang/LLVM and libbpf-dev
+- bpftool
+- Root privileges
+
+
 ### 🛠️ Build and Run
 
 ```
