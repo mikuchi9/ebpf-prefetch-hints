@@ -18,7 +18,7 @@ struct {
 
 __u64 unique_bins_count = 0;
 
-static __always_inline __u8 str_cmp(const char *s1, __u16 size, const char *s2)
+static __always_inline int str_cmp(const char *s1, __u16 size, const char *s2)
 {
     int i;
     #pragma unroll
