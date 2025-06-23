@@ -190,6 +190,8 @@ int main(int argc, char **argv) {
             // release an ELF descriptor
             elf_end(elf);
             close(fd);
+            // free the memory dynamically allocated by malloc
+            free(bf[idx].name);
         }
         printf("here starts the NEXT round\n");
     }
